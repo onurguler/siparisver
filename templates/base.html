@@ -6,9 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sipariş Ver</title>
   <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+  <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
 </head>
-<body>
+<body class="antialiased text-gray-900">
+  {% include 'partials/navbar/_navbar.html' %}
+
   {% block content %}
   {% endblock content %}
+
+  {% block javascript %}
+  {% endblock javascript %}
 </body>
 </html>

@@ -1,0 +1,29 @@
+<header class="bg-white border-b shadow">
+  <div class="container mx-auto px-2 sm:px-6 lg:px-8 py-2">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <a href="{% url 'core:index' %}">
+          <i class="fas fa-utensils text-3xl align-middle text-red-500"></i>
+          <span class="ml-1 text-xl font-extrabold align-middle">Sipariş Ver</span>
+        </a>
+      </div>
+      <div class="flex items-center">
+        {% if user.is_authenticated %}
+          {% include 'partials/navbar/_account_dropdown.html' %}
+        {% else %}
+          <a href="{% url 'account_login' %}" class="px-2 py-1 bg-green-500 text-white font-bold rounded">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="ml-1 hidden sm:inline">Giriş Yap</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  $('.account-dropdown-button').click(function () {
+    // $('.account-dropdown-list').toggleClass('hidden');
+    $('.account-dropdown-list').fadeToggle();
+  });
+</script>
