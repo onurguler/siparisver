@@ -1,0 +1,17 @@
+{
+  "name": "siparisver",
+  "version": "1.0.0",
+  "description": "Sipariş Ver Frontend Application",
+  "main": "index.js",
+  "author": "Onur Güler <guleronurosman@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "postcss css/tailwind.css -o static_files/css/tailwind.css"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.7.4",
+    "postcss-cli": "^7.1.0",
+    "tailwindcss": "^1.2.0"
+  }
+}
