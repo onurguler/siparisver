@@ -15,8 +15,12 @@
                 <a href="#" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline"><i class="fas fa-plus"></i></a>
               </div>
               <div>
-                <p class="font-bold text-blue-700">{{ order_item.product.name }}</p>
-                <p class="text-sm text-gray-600">{{ order_item.product.content }}</p>
+                <p class="font-bold text-blue-700">{{ order_item.product.title }}</p>
+
+                {% if order_item.product.content %}
+                  <p class="text-sm text-gray-600">{{ order_item.product.content }}</p>
+                {% endif %}
+
               </div>
             </div>
             <div class="flex items-center">

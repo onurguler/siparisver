@@ -5,18 +5,22 @@
     {% for category in categories %}
       <div class="mb-4 max-w-xl border shadow rounded-md bg-white">
         <div class="px-4 py-2 border-b">
-          <h1 class="text-xl font-bold">{{ category.name }}</h1>
+          <h1 class="text-xl font-bold">{{ category.title }}</h1>
         </div>
 
         {% for product in category.get_products %}
           <div class="px-4 py-2 flex items-center justify-between">
             <div class="w-8/12">
-              <h1 class="font-bold text-blue-700">{{ product.name }}</h1>
-              <p class="text-sm text-gray-600">{{ product.content }}</p>
+              <h1 class="font-bold text-blue-700">{{ product.title }}</h1>
+
+              {% if product.content %}
+                <p class="text-sm text-gray-600">{{ product.content }}</p>
+              {% endif %}
+
             </div>
             <div class="w-4/12 sm:flex sm:items-center sm:justify-end text-right">
               <p class="font-bold text-blue-500">{{ product.price }} TL</p>
-              <a href="{% url 'order:add_to_cart' product_id=product.pk %}" class="ml-2 bg-green-500 text-white px-2 py-1 rounded hover:bg-green-500 focus:outline-none focus:shadow-outline"><i class="fas fa-plus"></i></a>
+              <a href="{% url 'order:add_to_cart' slug=product.slug %}" class="ml-2 bg-green-500 text-white px-2 py-1 rounded hover:bg-green-500 focus:outline-none focus:shadow-outline"><i class="fas fa-plus"></i></a>
             </div>
           </div>
         {% endfor %}

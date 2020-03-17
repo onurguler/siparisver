@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from django.views.generic import ListView
 
-from .models import ProductCategory, Product
+from .models import ProductCategory
 
 
 class ProductListView(ListView):
@@ -10,5 +9,5 @@ class ProductListView(ListView):
     template_name = 'products/product_list.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('name')
+        queryset = super().get_queryset().order_by('title')
         return queryset

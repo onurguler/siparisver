@@ -9,8 +9,8 @@ from .models import Order, OrderItem
 
 
 @login_required
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+def add_to_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
     order, created = Order.objects.get_or_create(
         user=request.user, ordered=False)
     order_item_queryset = order.items.filter(product=product)
