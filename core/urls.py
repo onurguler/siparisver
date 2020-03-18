@@ -16,4 +16,5 @@ urlpatterns = [
     path('remove-single-item-from-cart/<slug:slug>',
          views.remove_single_item_from_cart,
          name='remove_single_item_from_cart'),
+    path('empty-cart/', views.empty_cart, name='empty_cart'),
 ]
