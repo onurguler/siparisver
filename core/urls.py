@@ -7,8 +7,8 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('products', views.ProductListView.as_view(), name='product_list'),
-    path('order-summary', views.order_summary, name='order_summary'),
+    path('products/', views.ProductListView.as_view(), name='product_list'),
+    path('order-summary/', views.order_summary, name='order_summary'),
     path('add-to-cart/<slug:slug>',
          views.add_to_cart, name='add_to_cart'),
     path('remove-from-cart/<slug:slug>',
