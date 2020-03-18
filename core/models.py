@@ -5,17 +5,25 @@ from django.db.models.signals import pre_save
 from siparisver.utils import unique_slug_generator
 
 
-class ProductCategory(models.Model):
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class ProductCategory(TimeStampedModel):
     title = models.CharField(max_length=256)
 
     def __str__(self):
         return self.title
 
     def get_products(self):
-        return self.products.order_by('title')
+        return self.products.order_by('created_at')
 
 
-class Product(models.Model):
+class Product(TimeStampedModel):
     title = models.CharField(max_length=256)
     content = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -33,7 +41,7 @@ class Product(models.Model):
         return self.title
 
 
-class Order(models.Model):
+class Order(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
@@ -50,7 +58,7 @@ class Order(models.Model):
         return total
 
 
-class OrderItem(models.Model):
+class OrderItem(TimeStampedModel):
     order = models.ForeignKey(
         Order, related_name='items', on_delete=models.CASCADE
     )

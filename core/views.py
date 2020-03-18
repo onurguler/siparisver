@@ -13,7 +13,7 @@ class ProductListView(ListView):
     template_name = 'products/product_list.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('title')
+        queryset = super().get_queryset().order_by('created_at')
         return queryset
 
 
