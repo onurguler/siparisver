@@ -111,3 +111,75 @@ def empty_cart(request):
 
     messages.success(request, 'Sepetiniz boşaltılmıştır.')
     return redirect('core:order_summary')
+
+
+"""
+# TODO: Session based cart
+# Session Tabanlı Sepet Denemesi
+# Arka arkaya login olmamışken sepete ekleyip tekrar login olunduğunda
+# Login olurken response dönmüyor refresh etmek gerekiyor
+# Bu soruna daha sonra bak
+
+
+def view_cart(request):
+    cart = request.session.get('cart', {})
+
+    order = []
+    total_price = 0
+
+    for key, value in cart.items():
+        product = Product.objects.get(slug=key)
+        order.append({'product': product, 'quantity': value})
+        total_price += product.price
+
+    context = {'order': order, 'total_price': total_price}
+
+    return render(request, 'cart/cart.html', context)
+
+
+def add_to_cart_session(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    cart = request.session.get('cart', {})
+
+    cart[product.slug] = cart.get(product.slug, 0) + 1
+
+    request.session['cart'] = cart
+
+    messages.success(request, 'Ürün sepetinize eklenmiştir.')
+
+    return redirect('core:cart')
+
+
+def remove_from_cart_session(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    cart = request.session.get('cart', {})
+
+    del cart[product.slug]
+
+    request.session['cart'] = cart
+
+    messages.success(request, 'Ürün sepetinizden kaldırılmıştır.')
+
+    return redirect('core:cart')
+
+
+def remove_single_item_from_cart_session(request, slug):
+    # product = get_object_or_404(Product, slug=slug)
+    cart = request.session.get('cart', {})
+
+    if slug in cart:
+        cart[slug] -= 1
+
+        if cart[slug] <= 0:
+            del cart[slug]
+
+        request.session['cart'] = cart
+
+    return redirect('core:cart')
+
+
+def empty_cart_session(request):
+    del request.session['cart']
+    messages.success(request, 'Sepetiniz boşaltılmıştır.')
+    return redirect('core:cart')
+"""

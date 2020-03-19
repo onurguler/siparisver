@@ -17,4 +17,15 @@ urlpatterns = [
          views.remove_single_item_from_cart,
          name='remove_single_item_from_cart'),
     path('empty-cart/', views.empty_cart, name='empty_cart'),
+    #    Session based cart urls
+    #     path('cart/', views.view_cart, name='cart'),
+    #     path('add-to-cart-session/<slug:slug>',
+    #          views.add_to_cart_session, name='add_to_cart_session'),
+    #     path('remove-from-cart-session/<slug:slug>',
+    #          views.remove_from_cart_session, name='remove_from_cart_session'),
+    #     path('remove-single-item-from-cart-session/<slug:slug>',
+    #          views.remove_single_item_from_cart_session,
+    #          name='remove_single_item_from_cart_session'),
+    #     path('empty-cart-session/',
+    #          views.empty_cart_session, name='empty_cart_session')
 ]
