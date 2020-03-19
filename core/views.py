@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
+from django.contrib import messages
 
 from .models import Product, ProductCategory, Order, OrderItem
 
@@ -33,7 +34,7 @@ def add_to_cart(request, slug):
     else:
         OrderItem.objects.create(order=order, product=product)
 
-    # TODO: success message => Ürün sepetinize eklenmiştir
+    messages.success(request, 'Ürün sepetinize eklenmiştir.')
     return redirect('core:order_summary')
 
 
@@ -69,7 +70,7 @@ def remove_from_cart(request, slug):
     order_item = order_item_qs[0]
     order_item.delete()
 
-    # TODO: success message => Ürün sepetinizden kaldırılmıştır
+    messages.success(request, 'Ürün sepetinizden kaldırılmıştır.')
     return redirect('core:order_summary')
 
 
@@ -108,4 +109,5 @@ def empty_cart(request):
         order = order_qs[0]
         order.delete()
 
+    messages.success(request, 'Sepetiniz boşaltılmıştır.')
     return redirect('core:order_summary')
