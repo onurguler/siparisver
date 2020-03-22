@@ -4,20 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sipariş Ver</title>
+  <title>{% block head_title %}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
   <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  {% block extra_head %}
+  {% endblock %}
 </head>
 <body class="antialiased text-gray-900 bg-gray-100">
-  {% include 'partials/navbar/_navbar.html' %}
+  {% block body %}
+    {% include 'partials/navbar/_navbar.html' %}
 
-  {% include 'partials/messages/_messages.html' %}
+    {% include 'partials/messages/_messages.html' %}
 
-  {% block content %}
-  {% endblock content %}
+    {% block content %}
+    {% endblock content %}
 
-  {% block javascript %}
-  {% endblock javascript %}
+    {% block javascript %}
+    {% endblock javascript %}
+  {% endblock body %}
+
+  {% block extra_body %}
+  {% endblock %}
 </body>
 </html>

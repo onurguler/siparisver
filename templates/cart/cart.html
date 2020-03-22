@@ -9,7 +9,7 @@
           <h1 class="mb-4 text-2xl font-bold">Sipariş Özeti</h1>
           <a href="{% url 'core:empty_cart_session' %}"><i class="fas fa-trash"></i></a>
         </div>
-
+      
         <div class="bg-white border border-b-0 rounded-lg shadow">
           {% for order_item in order %}
             <div class="p-4 border-b">

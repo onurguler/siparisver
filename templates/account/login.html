@@ -1,0 +1,96 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load form_utils %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full">
+    <div>
+      <div class="text-center"><i class="fas fa-utensils text-5xl align-middle text-red-500"></i></div>
+
+      <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+        Sign in to your account
+      </h2>
+
+      {% get_providers as socialaccount_providers %}
+
+      {% if socialaccount_providers %}
+      <p>{% blocktrans with site.name as site_name %}Please sign in with one
+      of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+      for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+      <div class="socialaccount_ballot">
+
+        <ul class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </ul>
+
+        <div class="login-or">{% trans 'or' %}</div>
+
+      </div>
+
+      {% include "socialaccount/snippets/login_extra.html" %}
+
+      {% else %}
+
+      <p class="mt-2 text-center text-sm leading-5 text-gray-600">
+        {% blocktrans %}
+          If you have not created an account yet, then please
+          <a href="{{ signup_url }}" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+          sign up
+          </a>
+          first.
+        {% endblocktrans %}
+      </p>
+      {% endif %}
+    </div>
+
+    <form class="mt-8 login" action="{% url 'account_login' %}" method="POST">
+      {% csrf_token %}
+
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+
+      <div class="rounded-md shadow-sm">
+        <div>
+          {{ form.login | addclass:'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5' }}
+        </div>
+        <div class="-mt-px">
+          {{ form.password | addclass:'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5' }}
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-center justify-between">
+        <div class="flex items-center">
+          {{ form.remember | addclass:'form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out' }}
+          <label for="remember_me" class="ml-2 block text-sm leading-5 text-gray-900">
+            {{ form.remember.label }}
+          </label>
+        </div>
+
+        <div class="text-sm leading-5">
+          <a href="{% url 'account_reset_password' %}" class="button secondaryAction font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+            {% trans "Forgot Password?" %}
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button type="submit" class="primaryAction group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition ease-in-out duration-150" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          {% trans "Sign In" %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
