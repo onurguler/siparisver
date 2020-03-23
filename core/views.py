@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (
+    ListView, View, CreateView, UpdateView, DeleteView)
 from django.contrib import messages
 
-from .models import Product, ProductCategory, Order, OrderItem
+from .models import Product, ProductCategory, Order, OrderItem, Address
 
 
 class ProductListView(ListView):
@@ -14,6 +17,72 @@ class ProductListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset().order_by('created_at')
         return queryset
+
+
+class CheckoutView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+
+        if not order_qs.exists():
+            return redirect('core:order_summary')
+
+        order = order_qs[0]
+        order_items = order.items.all()
+
+        if order_items.count() < 1:
+            return redirect('core:order_summary')
+
+        context = {'order': order, 'order_items': order_items}
+
+        return render(self.request, 'checkout/checkout.html', context)
+
+
+class AddressListView(LoginRequiredMixin, ListView):
+    model = Address
+    context_object_name = 'addresses'
+    template_name = 'addresses/address_list.html'
+
+    def get_queryset(self):
+        qs = self.request.user.addresses.order_by('-updated_at')
+        return qs
+
+
+class AddressCreateView(LoginRequiredMixin, CreateView):
+    model = Address
+    fields = ('title', 'text')
+    success_url = reverse_lazy('core:address_list')
+    template_name = 'addresses/create_address.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+
+        self.request.user.selected_address = self.object
+        self.request.user.save()
+
+        return redirect(self.get_success_url())
+
+
+class AddressUpdateView(LoginRequiredMixin, UpdateView):
+    model = Address
+    fields = ('title', 'text')
+    success_url = reverse_lazy('core:address_list')
+    template_name = 'addresses/update_address.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(user=self.request.user)
+        return qs
+
+
+class AddressDeleteView(LoginRequiredMixin, DeleteView):
+    model = Address
+    success_url = reverse_lazy('core:address_list')
+    template_name = 'addresses/address_confirm_delete.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(user=self.request.user)
+        return qs
 
 
 def index(request):
@@ -111,6 +180,14 @@ def empty_cart(request):
 
     messages.success(request, 'Sepetiniz boşaltılmıştır.')
     return redirect('core:order_summary')
+
+
+@login_required
+def set_selected_address(request, address_id):
+    address = get_object_or_404(Address, user=request.user, pk=address_id)
+    request.user.selected_address = address
+    request.user.save()
+    return redirect('core:address_list')
 
 
 """

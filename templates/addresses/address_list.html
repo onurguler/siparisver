@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="px-4 py-4 max-w-7xl mx-auto">
+    <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">ADRESLERİM</h2>
+
+    
+    
+    
+    <div class="border border-b-0 bg-white rounded-lg shadow-md">
+      {% if addresses.count > 0 %}
+        {% for address in addresses %}
+          <div class="px-4 py-6 relative overflow-hidden border-b">
+            <h2 class="text-xl font-semibold">{{ address.title }}</h2>      
+            <p class="text-gray-600">{{ address.text }}</p>
+            {% if address == user.selected_address %}
+              <p class="absolute right-0 top-0 px-4 py-2 text-green-500">Seçili Adres <i class="far fa-check-circle"></i></p>
+            {% else %}
+              <div class="mt-4 text-right">
+                <a href="{% url 'core:set_selected_address' address_id=address.pk %}" class="text-blue-500 hover:text-blue-600">Seçili adres olarak ayarla &#x279c;</a>
+              </div>
+            {% endif %}
+            <div class="mt-4 flex items-center justify-between">
+              <div>
+                <a href="{% url 'core:update_address' pk=address.pk %}" class="px-4 py-2 bg-gray-300 rounded font-semibold text-sm hover:bg-gray-400 focus:outline-none focus:shadow-outline">Düzenle <i class="fas fa-edit"></i></a>
+              </div>
+              <div>
+                <a href="{% url 'core:delete_address' pk=address.pk %}" class="px-4 py-2 text-lg text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="px-4 py-6 sm:flex sm:items-center sm:justify-between">
+          <div class="w-full sm:w-1/2 mr-4">
+            <p class="text-gray-600">Henüz bir adres eklemediniz. Adres eklemek için tıklayın.</p>
+          </div>
+          <div class="w-full sm:w-1/2">
+            <a href="{% url 'core:create_address' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Ekle <span class="float-right">&#x279c;</span></a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if addresses.count > 0 %}
+      <div class="mt-4 text-right">
+        <a href="{% url 'core:create_address' %}" class="px-10 py-2 block sm:inline bg-green-400 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-green-500 shadow-md">Yeni Adres Ekle <span class="float-right sm:float-none">&#x279c;</span></a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock content %}

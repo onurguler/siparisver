@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="px-4 py-4 max-w-7xl mx-auto">
+    <form class="px-4 py-6 bg-white rounded-lg border shadow-md" method="post">
+      {% csrf_token %}
+      <p class="text-xl"><span class="font-semibold">"{{ object }}"</span> adresini silmek istediğinizden emin misiniz?</p>
+      <div class="text-right">
+        <button class="mt-4 mr-4 px-4 py-2 bg-red-500 text-white font-semibold tex-sm rounded hover:bg-red-600 focus:outline-none focus:shadow-outline" type="submit">Adresi Sil <i class="fas fa-trash"></i></button>
+        <a href="{% url 'core:address_list' %}" class="px-6 py-3 bg-gray-300 font-semibold rounded text-sm hover:bg-gray-400 focus:outline-none focus:shadow-outline">İptal</a>
+      </div>
+    </form>
+  </div>
+{% endblock content %}

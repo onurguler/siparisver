@@ -2,62 +2,56 @@
 
 
 {% block content %}
-  <div class="container mx-auto px-2 sm:px-6 lg:px-8 py-2">
-    <div class="max-w-2xl mx-auto">
-      {% if order and order.items.all.count > 0 %}
-        <div class="flex items-center justify-between">
-          <h1 class="mb-4 text-2xl font-bold">Sipariş Özeti</h1>
-          <a href="{% url 'core:empty_cart' %}"><i class="fas fa-trash"></i></a>
-        </div>
+  <div class="px-4 py-4 max-w-7xl mx-auto">
+    <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">SEPETİNİZDEKİ ÜRÜNLER</h2>
 
-        <div class="bg-white border border-b-0 rounded-lg shadow">
-          {% for order_item in order.items.all %}
-            <div class="p-4 border-b">
-              <div class="flex items-start justify-between">
-                <div class="w-8/12">
-                  <h1 class="text-xl font-bold">{{ order_item.product.title }}</h1>
-
-                  {% if order_item.product.content %}
-                  <p class="text-gray-600">{{ order_item.product.content }}</p>
-                  {% endif %}
-                </div>
-
-                <div class="w-4/12">
-                  <p class="text-right text-xl font-bold text-blue-500">{{ order_item.product.price }} TL</p>
-                </div>
+    {% if order and order.items.all.count > 0 %}
+      <div class="border border-b-0 bg-white rounded-lg shadow-md">
+        {% for order_item in order.items.all %}
+          <div class="px-4 py-6 relative overflow-hidden border-b">
+            <h2 class="text-xl font-semibold">{{ order_item.product.title }}</h2>
+            {% if order_item.product.content %}
+              <p class="mt-4 text-gray-600">{{ order_item.product.content }}</p>
+            {% endif %}
+            <p class="text-right text-xl font-semibold text-orange-700">{{ order_item.product.price }} TL</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="flex items-center border rounded-full">
+                <a href="{% url 'core:remove_single_item_from_cart' slug=order_item.product.slug %}" class="px-4 py-2 rounded-l-full hover:bg-gray-100"><i class="fas fa-minus"></i></a>
+                <span class="px-4 py-2 border-l border-r">{{ order_item.quantity }}</span>
+                <a href="{% url 'core:add_to_cart' slug=order_item.product.slug %}" class="px-4 py-2 rounded-r-full hover:bg-gray-100"><i class="fas fa-plus"></i></a>
               </div>
-
-              <div class="mt-2 flex items-center justify-between">
-                <div class="mr-4">
-                  <a href="{% url 'core:remove_single_item_from_cart' slug=order_item.product.slug %}" class="px-2 py-1 bg-orange-400 text-white rounded hover:bg-orange-500 focus:outline-none focus:shadow-outline"><i class="fas fa-minus"></i></a>
-                  <span class="px-2">{{ order_item.quantity }}</span>
-                  <a href="{% url 'core:add_to_cart' slug=order_item.product.slug %}" class="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline"><i class="fas fa-plus"></i></a>
-                </div>
-
-                <div>
-                  <a href="{% url 'core:remove_from_cart' slug=order_item.product.slug %}" class="ml-4 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:shadow-outline"><i class="fas fa-times"></i></a>
-                </div>
+              <div>
+                <a href="{% url 'core:remove_from_cart' slug=order_item.product.slug %}" class="px-4 py-2 text-lg text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></a>
               </div>
             </div>
-          {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Buttons -->
+      <div class="mt-8 sm:flex sm:items-center sm:justify-between">
+        <a href="{% url 'core:product_list' %}" class="block sm:mr-4 px-4 py-2 w-full sm:w-1/2 bg-gray-300 text-xl font-semibold text-center rounded-full shadow-md hover:bg-gray-400">Alışverişe Devam Et <span class="float-right">&#x279c;</span></a>
+        <a href="{% url 'core:empty_cart' %}" class="block mt-4 sm:mt-0 px-4 py-2 w-full sm:w-1/2 bg-red-500 text-xl font-semibold text-center text-white rounded-full shadow-md hover:bg-red-600">Sepeti Boşalt <i class="ml-2 float-right mt-1 fas fa-trash"></i></a>
+      </div>
+      <!-- End Buttons -->
+
+      <!-- Total Cost -->
+      <div class="mt-8 px-4 py-6 relative overflow-hidden bg-white rounded-lg border shadow-md">
+        <div class="sm:flex sm:items-center sm:justify-between">
+          <div class="w-full sm:w-1/2 flex items-center justify-between mr-4">
+            <p class="text-xl font-semibold">Toplam Tutar</p>
+            <p class="text-xl font-semibold text-orange-700">{{ order.get_total_price }} TL</p>
+          </div>
+          <div class="w-full sm:w-1/2">
+            <a href="{% url 'core:checkout' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-green-400 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-green-500 shadow-md">Sepeti Onayla <span class="float-right">&#x279c;</span></a>
+          </div>
         </div>
-
-        <p class="py-2 text-right">
-          <span class="text-lg font-bold mr-4">Toplam Tutar:</span>
-          {{ order.get_total_price }} TL
-        </p>
-
-        <div class="text-right py-2">
-          <a href="{% url 'core:product_list' %}" class="px-4 py-2 bg-gray-300 font-bold rounded hover:bg-gray-400 focus:outline-none focus:shadow-outline">Alışverişe Devam Et</a>
-          <a href="#" class="ml-4 px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-600 focus:outline-none focus:shadow-outline">Siparişi Onayla</a>
-        </div>
-
-      {% else %}
-        <div class="p-8 bg-white rounded-lg border">
-          <h1 class="text-lg">Sepetinizde ürün bulunmamaktadır. Karnını acıktıracak menümüze göz atmak için <a href="{% url 'core:product_list' %}" class="text-blue-500 hover:text-blue-600 hover:underline focus:outline-none">tıkla.</a></h1>
-        </div>
-      {% endif %}
-
-    </div>
+      </div>
+      <!-- End Total Cost -->
+    {% else %}
+      <div class="px-4 py-6 bg-white border rounded-lg shado-md">
+        <p class="text-gray-600 text-xl font-semibold">Sepetinizde ürün bulunmamaktadır.</p>
+      </div>
+    {% endif %}
   </div>
 {% endblock content %}

@@ -1,30 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container mx-auto px-2 sm:px-6 lg:px-8 py-2">
-    {% for category in categories %}
-      <div class="mb-4 max-w-xl border shadow rounded-md bg-white">
-        <div class="px-4 py-2 border-b">
-          <h1 class="text-xl font-bold">{{ category.title }}</h1>
-        </div>
-
+<div class="px-4 py-4 max-w-7xl mx-auto">
+  {% for category in categories %}
+    <div>
+      <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">{{ category.title }}</h2>
+      <div class="border border-b-0 bg-white rounded-lg shadow-md">
         {% for product in category.get_products %}
-          <div class="px-4 py-2 flex items-center justify-between">
-            <div class="w-8/12">
-              <h1 class="font-bold text-blue-700">{{ product.title }}</h1>
-
-              {% if product.content %}
-                <p class="text-sm text-gray-600">{{ product.content }}</p>
-              {% endif %}
-
-            </div>
-            <div class="w-4/12 sm:flex sm:items-center sm:justify-end text-right">
-              <p class="font-bold text-blue-500">{{ product.price }} TL</p>
-              <a href="{% url 'core:add_to_cart' slug=product.slug %}" class="ml-2 bg-green-500 text-white px-2 py-1 rounded hover:bg-green-500 focus:outline-none focus:shadow-outline"><i class="fas fa-plus"></i></a>
+          <div class="px-4 py-6 relative overflow-hidden border-b">
+            <h2 class="text-xl font-semibold">{{ product.title }} <button class="image-open text-gray-600 hover:text-gray-900"><i class="fas fa-camera"></i></button></h2>
+            {% if product.content %}
+              <p class="mt-4 text-gray-600">{{ product.content }}</p>
+            {% endif %}
+            <p class="text-right text-xl font-semibold text-orange-700">{{ product.price }} TL</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="flex items-center border rounded-full">
+                <a href="#" class="px-4 py-2 rounded-l-full hover:bg-gray-100"><i class="fas fa-minus"></i></a>
+                <span class="px-4 py-2 border-l border-r">3</span>
+                <a href="#" class="px-4 py-2 rounded-r-full hover:bg-gray-100"><i class="fas fa-plus"></i></a>
+              </div>
+              <div>
+                <a href="{% url 'core:add_to_cart' slug=product.slug %}" class="px-4 py-2 bg-green-400 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-green-500"><span class="hidden sm:inline-block">Sepete Ekle</span> <i class="sm:ml-2 fas fa-plus"></i></a>
+              </div>
             </div>
           </div>
         {% endfor %}
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}

@@ -1,8 +1,20 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import pre_save
+from django.contrib import auth
 
 from siparisver.utils import unique_slug_generator
+
+
+class User(auth.models.AbstractUser):
+    selected_address = models.ForeignKey('Address',
+                                         null=True,
+                                         blank=True,
+                                         on_delete=models.SET_NULL,
+                                         related_name='profile')
+
+    def __str__(self):
+        return self.username
 
 
 class TimeStampedModel(models.Model):
@@ -78,6 +90,17 @@ class OrderItem(TimeStampedModel):
         if self.product.discount_price:
             return self.get_total_discount_price()
         return self.get_total_price()
+
+
+class Address(TimeStampedModel):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='addresses')
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.title
 
 
 def slug_generator(sender, instance, *args, **kwargs):

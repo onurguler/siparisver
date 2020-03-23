@@ -10,8 +10,21 @@
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   {% block extra_head %}
   {% endblock %}
+  <style>
+    .worksans {
+        font-family: 'Work Sans', sans-serif;
+    }
+            
+    #menu-toggle:checked + #menu {
+        display: block;
+    }
+
+    .hind-vadodara {
+        font-family: 'Hind Vadodara', sans-serif;
+    }
+  </style>
 </head>
-<body class="antialiased text-gray-900 bg-gray-100">
+<body class="bg-gray-100 text-gray-900 antialiased worksans">
   {% block body %}
     {% include 'partials/navbar/_navbar.html' %}
 

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="px-4 py-4 max-w-7xl mx-auto">
+    <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">YENİ ADRES EKLE</h2>
+
+     <form name="addressForm" method="post" class="w-full">
+      {% csrf_token %}
+      {% load form_utils %}
+      {% for field in form %}
+        <p id="{{ field.name }}">
+          <h4 class="mb-2 text-xl font-semibold mt-4">{{ field.label_tag }}</h4>
+          {{ field | placeholder:field.label | addclass:'px-2 py-1 bg-white border rounded w-full focus:outline-none focus:shadow-outline'}}
+          {% for error in field.errors %}
+            <p class="text-red-600 text-sm form-error">{{ error }}</p>
+            <script type="text/javascript">
+              document.addressForm.{{field.name}}.classList.remove('border')
+              document.addressForm.{{field.name}}.classList.add('border-red-500', 'border-2');
+            </script>
+          {% endfor %}
+          {% if field.help_text %}
+            <small class="text-gray-600">{{ field.help_text }}</small>
+          {% endif %}
+        </p>
+      {% endfor %}
+      <button type="submit" class="float-right mt-4 px-4 w-full sm:w-auto py-2 bg-green-500 text-white font-bold text-center rounded-full focus:outline-none focus:shadow-outline hover:bg-green-600">Adresi Kaydet <span class="float-right sm:float-none">&#x279c;</span></button>
+    </form>
+  </div>
+{% endblock content %}
