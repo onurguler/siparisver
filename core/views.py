@@ -20,6 +20,7 @@ class ProductListView(ListView):
 
 
 class CheckoutView(LoginRequiredMixin, View):
+
     def get(self, *args, **kwargs):
         order_qs = Order.objects.filter(user=self.request.user, ordered=False)
 
@@ -35,6 +36,40 @@ class CheckoutView(LoginRequiredMixin, View):
         context = {'order': order, 'order_items': order_items}
 
         return render(self.request, 'checkout/checkout.html', context)
+
+    def post(self, *args, **kwargs):
+        order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+
+        if not order_qs.exists():
+            return redirect('core:order_summary')
+
+        order = order_qs[0]
+        order_items = order.items.all()
+
+        if order_items.count() < 1:
+            return redirect('core:order_summary')
+
+        if not self.request.user.selected_address:
+            messages.error(
+                self.request,
+                'Adres seçimi yapmadınız. Lütfen bir adres seçin.'
+            )
+            return redirect('core:checkout')
+
+        payment_option = self.request.POST.get('payment_option')
+
+        if payment_option != Order.PAYMENT_CHOICES[0][0] and payment_option != Order.PAYMENT_CHOICES[1][0]:
+            messages.error(
+                self.request, 'Lütfen geçerli bir ödeme yöntemi seçin.')
+            return redirect('core:checkout')
+
+        order.payment_option = payment_option
+        order.shipping_address = self.request.user.selected_address
+        order.ordered = True
+
+        order.save()
+
+        return redirect('core:checkout')
 
 
 class AddressListView(LoginRequiredMixin, ListView):

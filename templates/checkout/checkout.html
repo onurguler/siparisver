@@ -2,75 +2,80 @@
 
 {% block content %}
   <div class="px-4 py-4 max-w-7xl mx-auto">
-    <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">SİPARİŞ ÖZETİ</h2>
+    <form method="post">
+      {% csrf_token %}
+      <h2 class="py-10 uppercase text-center text-2xl leading-tight text-gray-600 font-semibold">SİPARİŞ ÖZETİ</h2>
 
-    <div class="border border-b-0 bg-white rounded-lg shadow-md">
-      {% for order_item in order_items %}
-        <div class="px-4 py-6 relative overflow-hidden border-b">
-          <h2 class="text-xl font-semibold"><span>{{ order_item.quantity }}</span> x {{ order_item.product.title }}</h2>
-          {% if order_item.product.content %}
-            <p class="mt-4 text-gray-600">{{ order_item.product.content }}</p>
-          {% endif %}
-          <p class="text-right text-xl font-semibold text-orange-700">{{ order_item.get_final_price }} TL</p>
-        </div>
-      {% endfor %}
-    </div>
-
-    <div class="mt-8 ml-auto w-full sm:w-1/2 flex items-center justify-between mr-4">
-      <p class="text-xl font-semibold">Toplam Tutar</p>
-      <p class="text-xl font-semibold text-orange-700">{{ order.get_total_price }} TL</p>
-    </div>
-
-    <!-- Address -->
-    <div class="mt-8 px-4 py-6 relative overflow-hidden bg-white rounded-lg border shadow-md">
-      {% if user.addresses.all.count > 0 %}
-        {% if user.selected_address %}
-          <div class="sm:flex sm:items-center sm:justify-between">
-            <div class="w-full sm:w-1/2 mr-4">
-              <p class="text-xl font-semibold">{{ user.selected_address.title }}</p>
-              <p class="text-gray-600">{{ user.selected_address.text }}</p>
-            </div>
-            <div class="w-full sm:w-1/2">
-              <a href="{% url 'core:address_list' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Değiştir <span class="float-right">&#x279c;</span></a>
-            </div>
+      <div class="border border-b-0 bg-white rounded-lg shadow-md">
+        {% for order_item in order_items %}
+          <div class="px-4 py-6 relative overflow-hidden border-b">
+            <h2 class="text-xl font-semibold"><span>{{ order_item.quantity }}</span> x {{ order_item.product.title }}</h2>
+            {% if order_item.product.content %}
+              <p class="mt-4 text-gray-600">{{ order_item.product.content }}</p>
+            {% endif %}
+            <p class="text-right text-xl font-semibold text-orange-700">{{ order_item.get_final_price }} TL</p>
           </div>
+        {% endfor %}
+      </div>
+
+      <div class="mt-8 ml-auto w-full sm:w-1/2 flex items-center justify-between mr-4">
+        <p class="text-xl font-semibold">Toplam Tutar</p>
+        <p class="text-xl font-semibold text-orange-700">{{ order.get_total_price }} TL</p>
+      </div>
+
+      <!-- Address -->
+      <div class="mt-8 px-4 py-6 relative overflow-hidden bg-white rounded-lg border shadow-md">
+        {% if user.addresses.all.count > 0 %}
+          {% if user.selected_address %}
+            <div class="sm:flex sm:items-center sm:justify-between">
+              <div class="w-full sm:w-1/2 mr-4">
+                <p class="text-xl font-semibold">{{ user.selected_address.title }}</p>
+                <p class="text-gray-600">{{ user.selected_address.text }}</p>
+              </div>
+              <div class="w-full sm:w-1/2">
+                <a href="{% url 'core:address_list' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Değiştir <span class="float-right">&#x279c;</span></a>
+              </div>
+            </div>
+          {% else %}
+            <div class="sm:flex sm:items-center sm:justify-between">
+              <div class="w-full sm:w-1/2 mr-4">
+                <p class="text-gray-600">Henüz bir adres seçmediniz. Lütfen adreslerim sayfasından bir adres seçin.</p>
+              </div>
+              <div class="w-full sm:w-1/2">
+                <a href="{% url 'core:address_list' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Seç <span class="float-right">&#x279c;</span></a>
+              </div>
+            </div>
+          {% endif %}
         {% else %}
           <div class="sm:flex sm:items-center sm:justify-between">
             <div class="w-full sm:w-1/2 mr-4">
-              <p class="text-gray-600">Henüz bir adres seçmediniz. Lütfen adreslerim sayfasından bir adres seçin.</p>
+              <p class="text-gray-600">Henüz bir adres eklemediniz. Lütfen siparişinizi tamamlamak için bir adres ekleyin.</p>
             </div>
             <div class="w-full sm:w-1/2">
-              <a href="{% url 'core:address_list' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Seç <span class="float-right">&#x279c;</span></a>
+              <a href="{% url 'core:create_address' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Ekle <span class="float-right">&#x279c;</span></a>
             </div>
           </div>
         {% endif %}
-      {% else %}
-        <div class="sm:flex sm:items-center sm:justify-between">
-          <div class="w-full sm:w-1/2 mr-4">
-            <p class="text-gray-600">Henüz bir adres eklemediniz. Lütfen siparişinizi tamamlamak için bir adres ekleyin.</p>
-          </div>
-          <div class="w-full sm:w-1/2">
-            <a href="{% url 'core:create_address' %}" class="mt-4 sm:mt-0 block px-4 py-2 bg-blue-500 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-blue-600 shadow-md">Adres Ekle <span class="float-right">&#x279c;</span></a>
-          </div>
-        </div>
-      {% endif %}
-    </div>
-    <!-- End Address -->
+      </div>
+      <!-- End Address -->
 
-    <!-- Payment Method -->
-    <div class="mt-8 px-4 py-6 relative overflow-hidden bg-white rounded-lg border shadow-md">
-      <h2 class="text-xl font-semibold">Ödeme Yöntemi Seçin</h2>
-      <div class="mt-4">
-        <div class="flex items-center">
-          <input type="radio" class="form-radio mr-2">
-          <p><span class="font-semibold">Kredi Kartı</span> <span class="text-gray-600">(Sipariş tesliminde kredi kartı / banka kartı ile ödeme)</span></p>
-        </div>
-        <div class="mt-4 flex items-center">
-          <input type="radio" class="form-radio mr-2">
-          <p><span class="font-semibold">Nakit</span></p>
+      <!-- Payment Method -->
+      <div class="mt-8 px-4 py-6 relative overflow-hidden bg-white rounded-lg border shadow-md">
+        <h2 class="text-xl font-semibold">Ödeme Yöntemi Seçin</h2>
+        <div class="mt-4">
+          <div class="flex items-center">
+            <input type="radio" class="form-radio mr-2" name="payment_option" value="credit_card">
+            <p><span class="font-semibold">Kredi Kartı</span> <span class="text-gray-600">(Sipariş tesliminde kredi kartı / banka kartı ile ödeme)</span></p>
+          </div>
+          <div class="mt-4 flex items-center">
+            <input type="radio" class="form-radio mr-2" name="payment_option" value="cash">
+            <p><span class="font-semibold">Nakit</span></p>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- End Payment Method -->
+      <!-- End Payment Method -->
+
+      <button type="submit" class="mt-8 px-4 py-2 bg-green-400 text-xl font-semibold text-white rounded-full w-full text-center hover:bg-green-500 shadow-md focus:outline-none focus:shadow-outline">Siparişi Onayla <span class="float-right">&#x279c;</span></button>
+    </form>
   </div>
 {% endblock content %}

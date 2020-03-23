@@ -54,11 +54,27 @@ class Product(TimeStampedModel):
 
 
 class Order(TimeStampedModel):
+    PAYMENT_CHOICES = (
+        ('credit_card', 'Credit Card'),
+        ('cash', 'Cash')
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(null=True, blank=True)
     ordered = models.BooleanField(default=False)
+    shipping_address = models.ForeignKey(
+        'Address',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    payment_option = models.CharField(
+        choices=PAYMENT_CHOICES,
+        null=True,
+        blank=True,
+        max_length=255
+    )
 
     def __str__(self):
         return self.user.username
