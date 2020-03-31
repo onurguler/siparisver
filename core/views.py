@@ -69,6 +69,9 @@ class CheckoutView(LoginRequiredMixin, View):
 
         order.save()
 
+        messages.success(
+            self.request, 'Siparişiniz alınmıştır. Afiyet olsun :)')
+
         return redirect('core:checkout')
 
 
@@ -118,6 +121,11 @@ class AddressDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         qs = super().get_queryset().filter(user=self.request.user)
         return qs
+
+
+# TODO: Order List view: Kullanıcının siparişlerini listele
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
 
 
 def index(request):
